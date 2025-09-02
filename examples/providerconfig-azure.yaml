@@ -1,0 +1,37 @@
+apiVersion: azure.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: azure-creds
+      key: credentials
+  # Optional: specify subscription ID
+  # subscriptionID: "your-subscription-id"
+  # Optional: specify tenant ID
+  # tenantID: "your-tenant-id"
+  # Optional: specify client ID
+  # clientID: "your-client-id"
+#---
+# Example secret for Azure credentials
+# kubectl create secret generic azure-creds -n crossplane-system --from-file=credentials=./azure-credentials.json
+
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: azure-creds
+#  namespace: crossplane-system
+#type: Opaque
+#data:
+#  # Base64 encoded Azure service principal JSON credentials
+#  # Example content for azure-credentials.json:
+#  # {
+#  #   "clientId": "your-client-id",
+#  #   "clientSecret": "your-client-secret",
+#  #   "subscriptionId": "your-subscription-id",
+#  #   "tenantId": "your-tenant-id"
+#  # }
+#  credentials: eyJjbGllbnRJZCI6InlvdXItY2xpZW50LWlkIiwiY2xpZW50U2VjcmV0IjoieW91ci1jbGllbnQtc2VjcmV0Iiwic3Vic2NyaXB0aW9uSWQiOiJ5b3VyLXN1YnNjcmlwdGlvbi1pZCIsInRlbmFudElkIjoieW91ci10ZW5hbnQtaWQifQ==

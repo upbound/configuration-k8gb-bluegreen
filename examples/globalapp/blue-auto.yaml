@@ -1,0 +1,11 @@
+apiVersion: example.upbound.io/v1alpha1
+kind: GlobalApp
+metadata:
+  name: blue-auto
+  namespace: demo
+spec:
+  region: "East US"
+  primaryGeoTag: "us"
+  hostname: "auto-globalapp.cloud.example.com"
+  managementPolicies: ["*"]  # Initial policy
+  autoApplyRecommendedPolicy: true  # Auto mode - policies change based on GSLB health

@@ -1,0 +1,11 @@
+apiVersion: example.upbound.io/v1alpha1
+kind: GlobalApp
+metadata:
+  name: blue-active
+  namespace: default
+spec:
+  region: "West Europe"
+  primaryGeoTag: "eu"
+  hostname: "globalapp.cloud.example.com"
+  managementPolicies: ["*"]  # Initial policy
+  autoApplyRecommendedPolicy: false  # Manual mode

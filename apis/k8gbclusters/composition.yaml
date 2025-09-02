@@ -1,0 +1,16 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: k8gbclusters.example.upbound.io
+spec:
+  compositeTypeRef:
+    apiVersion: example.upbound.io/v1alpha1
+    kind: K8gbCluster
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: solutions-configuration-k8gb-bluegreenk8gb-operator
+    step: k8gb-operator
+  - functionRef:
+      name: crossplane-contrib-function-auto-ready
+    step: crossplane-contrib-function-auto-ready

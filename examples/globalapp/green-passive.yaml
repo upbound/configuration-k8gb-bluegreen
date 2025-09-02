@@ -1,0 +1,11 @@
+apiVersion: example.upbound.io/v1alpha1
+kind: GlobalApp
+metadata:
+  name: green-passive
+  namespace: demo
+spec:
+  region: "West US"
+  primaryGeoTag: "us"
+  hostname: "passive-globalapp.cloud.example.com"
+  managementPolicies: ["Observe"]  # Start in passive mode
+  autoApplyRecommendedPolicy: false  # Manual mode

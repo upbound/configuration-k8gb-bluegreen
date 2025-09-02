@@ -1,0 +1,22 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: globalapps.example.upbound.io
+spec:
+  compositeTypeRef:
+    apiVersion: example.upbound.io/v1alpha1
+    kind: GlobalApp
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: solutions-configuration-k8gb-bluegreeninfrastructure
+    step: infrastructure
+  - functionRef:
+      name: solutions-configuration-k8gb-bluegreenapplication
+    step: application
+  - functionRef:
+      name: solutions-configuration-k8gb-bluegreengslb-monitoring
+    step: gslb-monitoring
+  - functionRef:
+      name: crossplane-contrib-function-auto-ready
+    step: crossplane-contrib-function-auto-ready

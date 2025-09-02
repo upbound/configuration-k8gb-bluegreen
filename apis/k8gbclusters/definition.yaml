@@ -1,0 +1,83 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: k8gbclusters.example.upbound.io
+spec:
+  group: example.upbound.io
+  names:
+    categories:
+    - crossplane
+    kind: K8gbCluster
+    plural: k8gbclusters
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        description: K8gbCluster is the Schema for installing k8gb operator on a cluster.
+        properties:
+          spec:
+            description: K8gbClusterSpec defines the desired state of K8gbCluster.
+            type: object
+            properties:
+              version:
+                type: string
+                description: k8gb operator version to install
+                default: "v0.15.0"
+              geoTag:
+                type: string
+                description: Geographic tag for this cluster
+                default: "eu"
+              externalClustersGeoTags:
+                type: string
+                description: Comma-separated list of external cluster geo tags
+                default: "eu,us"
+              dnsZones:
+                type: array
+                description: DNS zones configuration for k8gb
+                items:
+                  type: object
+                  properties:
+                    parentZone:
+                      type: string
+                      description: Parent zone for DNS delegation
+                      default: "example.com"
+                    loadBalancedZone:
+                      type: string
+                      description: Zone controlled by k8gb
+                      default: "cloud.example.com"
+                    negTTL:
+                      type: integer
+                      description: Negative TTL for DNS records
+                      default: 30
+                default:
+                - parentZone: "example.com"
+                  loadBalancedZone: "cloud.example.com"
+                  negTTL: 30
+              edgeDNSServers:
+                type: array
+                description: Edge DNS servers for delegation
+                items:
+                  type: string
+                default: ["1.1.1.1"]
+              logLevel:
+                type: string
+                description: Log level for k8gb operator
+                enum: ["panic", "fatal", "error", "warn", "info", "debug", "trace"]
+                default: "info"
+          status:
+            description: K8gbClusterStatus defines the observed state of K8gbCluster.
+            type: object
+            properties:
+              installation:
+                type: object
+                description: k8gb operator installation status
+                properties:
+                  ready:
+                    type: boolean
+                    description: Whether k8gb operator is ready
+        required:
+        - spec
+        type: object
+    served: true
