@@ -8,7 +8,7 @@ An Upbound DevX configuration package that enables global blue/green deployments
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Cluster A     │    │   Cluster B     │    │   Cluster C     │
-│  (Primary EU)   │    │ (Secondary US)  │    │ (Secondary AS)  │
+│  (Primary EU)   │    │ (Secondary US)  │    │ (Secondary CN)  │
 ├─────────────────┤    ├─────────────────┤    ├─────────────────┤
 │ GlobalApp XR    │    │ GlobalApp XR    │    │ GlobalApp XR    │
 │ ├─Azure RG      │    │ ├─Azure RG      │    │ ├─Azure RG      │
@@ -26,11 +26,11 @@ An Upbound DevX configuration package that enables global blue/green deployments
 ```
 
 ### Global Blue/Green Health Monitoring
-![Crossplane Function Health Monitoring](https://www.k8gb.io/examples/crossplane/globalapp/assets/crossplane-function-health-monitoring.png)
+![Crossplane Function Health Monitoring](docs/assets/arch.png)
 
 The configuration uses intelligent health monitoring to automatically detect cluster health and recommend policy changes for seamless blue/green switching.
 
-### Active/Passive Cluster Policies  
+### Active/Passive Cluster Policies
 ![Active/Passive Cluster Policies](https://www.k8gb.io/examples/crossplane/globalapp/assets/active-passive-cluster-policies.png)
 
 Automatic policy management enables hands-off blue/green deployments where unhealthy clusters are automatically moved to "Observe" mode while healthy clusters receive traffic.
