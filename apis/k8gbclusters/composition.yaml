@@ -9,7 +9,7 @@ spec:
   mode: Pipeline
   pipeline:
   - functionRef:
-      name: solutions-configuration-k8gb-bluegreenk8gb-operator
+      name: upbound-configuration-k8gb-bluegreenk8gb-operator
     step: k8gb-operator
   - functionRef:
       name: crossplane-contrib-function-auto-ready

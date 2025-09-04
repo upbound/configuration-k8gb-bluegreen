@@ -9,13 +9,13 @@ spec:
   mode: Pipeline
   pipeline:
   - functionRef:
-      name: solutions-configuration-k8gb-bluegreeninfrastructure
+      name: upbound-configuration-k8gb-bluegreeninfrastructure
     step: infrastructure
   - functionRef:
-      name: solutions-configuration-k8gb-bluegreenapplication
+      name: upbound-configuration-k8gb-bluegreenapplication
     step: application
   - functionRef:
-      name: solutions-configuration-k8gb-bluegreengslb-monitoring
+      name: upbound-configuration-k8gb-bluegreengslb-monitoring
     step: gslb-monitoring
   - functionRef:
       name: crossplane-contrib-function-auto-ready

@@ -76,7 +76,7 @@ See [k8gb installation guide](https://www.k8gb.io/docs/install.html) for detaile
    metadata:
      name: configuration-k8gb-bluegreen
    spec:
-     package: xpkg.upbound.io/solutions/configuration-k8gb-bluegreen:latest
+     package: xpkg.upbound.io/upbound/configuration-k8gb-bluegreen:v0.1.0
    EOF
    ```
 
@@ -86,7 +86,7 @@ See [k8gb installation guide](https://www.k8gb.io/docs/install.html) for detaile
    cat > azure-credentials.json <<EOF
    {
      "clientId": "your-client-id",
-     "clientSecret": "your-client-secret", 
+     "clientSecret": "your-client-secret",
      "subscriptionId": "your-subscription-id",
      "tenantId": "your-tenant-id"
    }
