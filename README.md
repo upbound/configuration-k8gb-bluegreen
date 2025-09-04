@@ -2,6 +2,39 @@
 
 An Upbound DevX configuration package that enables global blue/green deployments across geographically distributed Kubernetes clusters using k8gb. This configuration provides automatic active/passive cluster switching with Azure infrastructure and intelligent GSLB health monitoring.
 
+## Architecture
+
+### Multi-Cluster Overview
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Cluster A     │    │   Cluster B     │    │   Cluster C     │
+│  (Primary EU)   │    │ (Secondary US)  │    │ (Secondary AS)  │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ GlobalApp XR    │    │ GlobalApp XR    │    │ GlobalApp XR    │
+│ ├─Azure RG      │    │ ├─Azure RG      │    │ ├─Azure RG      │
+│ ├─Redis Cache   │    │ ├─Redis Cache   │    │ ├─Redis Cache   │
+│ ├─Podinfo App   │    │ ├─Podinfo App   │    │ ├─Podinfo App   │
+│ └─k8gb GSLB     │    │ └─k8gb GSLB     │    │ └─k8gb GSLB     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌─────────────────┐
+                    │   DNS/GSLB      │
+                    │ Traffic Routing │
+                    └─────────────────┘
+```
+
+### Global Blue/Green Health Monitoring
+![Crossplane Function Health Monitoring](https://www.k8gb.io/examples/crossplane/globalapp/assets/crossplane-function-health-monitoring.png)
+
+The configuration uses intelligent health monitoring to automatically detect cluster health and recommend policy changes for seamless blue/green switching.
+
+### Active/Passive Cluster Policies  
+![Active/Passive Cluster Policies](https://www.k8gb.io/examples/crossplane/globalapp/assets/active-passive-cluster-policies.png)
+
+Automatic policy management enables hands-off blue/green deployments where unhealthy clusters are automatically moved to "Observe" mode while healthy clusters receive traffic.
+
 ## Features
 
 - **Global Blue/Green**: Automatic active/passive cluster switching based on health
@@ -117,39 +150,6 @@ spec:
 | `hostname` | Application hostname for ingress | `"globalapp.cloud.example.com"` |
 | `managementPolicies` | Crossplane management policies | `["*"]` |
 | `autoApplyRecommendedPolicy` | Enable automatic policy switching | `false` |
-
-## Architecture
-
-### Multi-Cluster Overview
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Cluster A     │    │   Cluster B     │    │   Cluster C     │
-│  (Primary EU)   │    │ (Secondary US)  │    │ (Secondary AS)  │
-├─────────────────┤    ├─────────────────┤    ├─────────────────┤
-│ GlobalApp XR    │    │ GlobalApp XR    │    │ GlobalApp XR    │
-│ ├─Azure RG      │    │ ├─Azure RG      │    │ ├─Azure RG      │
-│ ├─Redis Cache   │    │ ├─Redis Cache   │    │ ├─Redis Cache   │
-│ ├─Podinfo App   │    │ ├─Podinfo App   │    │ ├─Podinfo App   │
-│ └─k8gb GSLB     │    │ └─k8gb GSLB     │    │ └─k8gb GSLB     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌─────────────────┐
-                    │   DNS/GSLB      │
-                    │ Traffic Routing │
-                    └─────────────────┘
-```
-
-### Global Blue/Green Health Monitoring
-![Crossplane Function Health Monitoring](https://www.k8gb.io/examples/crossplane/globalapp/assets/crossplane-function-health-monitoring.png)
-
-The configuration uses intelligent health monitoring to automatically detect cluster health and recommend policy changes for seamless blue/green switching.
-
-### Active/Passive Cluster Policies  
-![Active/Passive Cluster Policies](https://www.k8gb.io/examples/crossplane/globalapp/assets/active-passive-cluster-policies.png)
-
-Automatic policy management enables hands-off blue/green deployments where unhealthy clusters are automatically moved to "Observe" mode while healthy clusters receive traffic.
 
 ## Testing
 
