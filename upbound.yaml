@@ -33,5 +33,5 @@ spec:
     - Application deployments with intelligent GSLB switching
 
     Built with modern Upbound DevX patterns and embedded KCL functions.
-  repository: xpkg.upbound.io/solutions/configuration-k8gb-bluegreen
+  repository: xpkg.upbound.io/upbound/configuration-k8gb-bluegreen
   source: github.com/upbound/configuration-k8gb-bluegreen
