@@ -1,0 +1,34 @@
+# RBAC for Crossplane to manage k8gb GSLB resources
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: crossplane-k8gb-access
+rules:
+# k8gb GSLB resources
+- apiGroups: ["k8gb.absa.oss"]
+  resources: ["gslbs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["k8gb.absa.oss"]
+  resources: ["gslbs/status"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# DNS endpoint resources (used by k8gb)
+- apiGroups: ["externaldns.k8s.io"]
+  resources: ["dnsendpoints"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["externaldns.k8s.io"]
+  resources: ["dnsendpoints/status"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crossplane-k8gb-access
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane-k8gb-access
+subjects:
+- kind: ServiceAccount
+  name: crossplane
+  namespace: crossplane-system

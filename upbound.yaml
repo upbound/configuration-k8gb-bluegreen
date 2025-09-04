@@ -24,10 +24,14 @@ spec:
     geographically distributed Kubernetes clusters
   license: Apache-2.0
   maintainer: Yury Tsarev <yury@upbound.io>
-  readme: "# Global Blue/Green Deployments with Upbound Crossplane and k8gb\n\nUpbound DevX
-    configuration enabling global blue/green deployments:\n- Azure infrastructure
-    via Upbound providers\n- k8gb operator installation automation\n- Application deployments
-    with intelligent GSLB switching\n\nBuilt with modern Upbound DevX patterns and embedded
-    KCL functions.\n"
+  readme: |
+    # Global Blue/Green Deployments with Upbound Crossplane and k8gb
+
+    Upbound DevX configuration enabling global blue/green deployments:
+    - Azure infrastructure via Upbound providers
+    - k8gb operator installation automation
+    - Application deployments with intelligent GSLB switching
+
+    Built with modern Upbound DevX patterns and embedded KCL functions.
   repository: xpkg.upbound.io/solutions/configuration-k8gb-bluegreen
   source: github.com/upbound/configuration-k8gb-bluegreen

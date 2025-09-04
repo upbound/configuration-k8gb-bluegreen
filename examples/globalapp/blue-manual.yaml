@@ -3,12 +3,9 @@ kind: GlobalApp
 metadata:
   name: blue-green
   namespace: default
-  annotations:
-    location: eu
-    environment: blue
 spec:
   region: "West Europe"
   primaryGeoTag: "eu"
   hostname: "globalapp.cloud.example.com"
   managementPolicies: ["*"]  # Initial policy
-  autoApplyRecommendedPolicy: true  # Auto mode - policies change based on GSLB health
+  autoApplyRecommendedPolicy: false  # Manual mode

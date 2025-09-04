@@ -7,25 +7,29 @@ import models.io.crossplane.helmm.v1beta1 as helmmv1beta1
 
 _items = [
     metav1alpha1.CompositionTest{
-        metadata.name = "test-globalapp-basic"
+        metadata.name = "test-globalapp-auto"
         spec = {
             assertResources: [
                 # The XR
                 examplev1alpha1.GlobalApp{
-                    metadata.name = "blue-active"
+                    metadata.name = "blue-green"
                     metadata.namespace = "default"
+                    metadata.annotations = {
+                        location = "eu"
+                        environment = "blue"
+                    }
                     spec = {
                         region = "West Europe"
                         primaryGeoTag = "eu"
                         hostname = "globalapp.cloud.example.com"
                         managementPolicies = ["*"]
-                        autoApplyRecommendedPolicy = False
+                        autoApplyRecommendedPolicy = True
                     }
                 }
-                
+
                 # Resource Group
                 azuremv1beta1.ResourceGroup{
-                    metadata.name = "resource-group-blue-active"
+                    metadata.name = "resource-group-blue-green"
                     metadata.labels = {
                         "demo" = "gslb"
                     }
@@ -34,10 +38,10 @@ _items = [
                     }
                     spec.managementPolicies = ["*"]
                 }
-                
+
                 # Redis Cache
                 cachev1beta1.RedisCache{
-                    metadata.name = "redis-cache-blue-active"
+                    metadata.name = "redis-cache-blue-green"
                     spec.forProvider = {
                         location = "West Europe"
                         resourceGroupNameSelector = {
@@ -61,39 +65,39 @@ _items = [
         }
     }
     metav1alpha1.CompositionTest{
-        metadata.name = "test-globalapp-auto"
+        metadata.name = "test-globalapp-manual"
         spec = {
             assertResources: [
                 # The XR
                 examplev1alpha1.GlobalApp{
-                    metadata.name = "blue-auto"
-                    metadata.namespace = "demo"
+                    metadata.name = "blue-green"
+                    metadata.namespace = "default"
                     spec = {
-                        region = "East US"
-                        primaryGeoTag = "us"
-                        hostname = "auto-globalapp.cloud.example.com"
+                        region = "West Europe"
+                        primaryGeoTag = "eu"
+                        hostname = "globalapp.cloud.example.com"
                         managementPolicies = ["*"]
-                        autoApplyRecommendedPolicy = True
+                        autoApplyRecommendedPolicy = False
                     }
                 }
-                
+
                 # Resource Group
                 azuremv1beta1.ResourceGroup{
-                    metadata.name = "resource-group-blue-auto"
+                    metadata.name = "resource-group-blue-green"
                     metadata.labels = {
                         "demo" = "gslb"
                     }
                     spec.forProvider = {
-                        location = "East US"
+                        location = "West Europe"
                     }
                     spec.managementPolicies = ["*"]
                 }
 
                 # Redis Cache
                 cachev1beta1.RedisCache{
-                    metadata.name = "redis-cache-blue-auto"
+                    metadata.name = "redis-cache-blue-green"
                     spec.forProvider = {
-                        location = "East US"
+                        location = "West Europe"
                         resourceGroupNameSelector = {
                             matchControllerRef = True
                         }
@@ -108,7 +112,7 @@ _items = [
                 }
             ]
             compositionPath = "../../apis/globalapps/composition.yaml"
-            xrPath = "../../examples/globalapp/blue-auto.yaml"
+            xrPath = "../../examples/globalapp/blue-manual.yaml"
             xrdPath = "../../apis/globalapps/definition.yaml"
             timeoutSeconds = 120
             validate = False
