@@ -120,6 +120,7 @@ spec:
 
 ## Architecture
 
+### Multi-Cluster Overview
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Cluster A     │    │   Cluster B     │    │   Cluster C     │
@@ -139,6 +140,16 @@ spec:
                     │ Traffic Routing │
                     └─────────────────┘
 ```
+
+### Global Blue/Green Health Monitoring
+![Crossplane Function Health Monitoring](https://www.k8gb.io/examples/crossplane/globalapp/assets/crossplane-function-health-monitoring.png)
+
+The configuration uses intelligent health monitoring to automatically detect cluster health and recommend policy changes for seamless blue/green switching.
+
+### Active/Passive Cluster Policies  
+![Active/Passive Cluster Policies](https://www.k8gb.io/examples/crossplane/globalapp/assets/active-passive-cluster-policies.png)
+
+Automatic policy management enables hands-off blue/green deployments where unhealthy clusters are automatically moved to "Observe" mode while healthy clusters receive traffic.
 
 ## Testing
 
