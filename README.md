@@ -81,7 +81,7 @@ apiVersion: example.upbound.io/v1alpha1
 kind: GlobalApp
 metadata:
   name: my-global-app
-  namespace: demo
+  namespace: default
 spec:
   region: "West Europe"
   primaryGeoTag: "eu"
@@ -99,7 +99,7 @@ apiVersion: example.upbound.io/v1alpha1
 kind: GlobalApp
 metadata:
   name: auto-global-app  
-  namespace: demo
+  namespace: default
 spec:
   region: "East US"
   primaryGeoTag: "us" 
@@ -155,18 +155,18 @@ up test run tests/*
 **Prerequisites**: k8gb must be installed and configured on all clusters.
 
 1. **Deploy test applications** across multiple clusters
-2. **Configure DNS delegation** for your test domains  
+2. **Configure DNS delegation** for your test domains
 3. **Apply GlobalApp resources** in each cluster
 4. **Test failover scenarios**:
    ```bash
    # Check GSLB status
-   kubectl get gslb -n demo
-   
+   kubectl get gslb
+
    # Test DNS resolution
    dig your-app.example.com
-   
+
    # Simulate cluster failure
-   kubectl scale deployment podinfo --replicas=0 -n demo
+   kubectl scale deployment podinfo --replicas=0
    ```
 
 ### Local Development
@@ -195,6 +195,108 @@ kubectl get globalapp my-global-app -o yaml
 - `application`: Podinfo and GSLB resource status  
 - `gslb`: Health monitoring and policy recommendations
 
+## 🚀 Multi-Cluster Blue/Green Demo
+
+### Complete Local Setup
+
+Set up a full local multi-cluster environment to demonstrate blue/green deployments:
+
+#### 1. **Prepare k8gb Test Environment**
+```bash
+# Clone and set up k8gb test environment
+git clone https://github.com/k8gb-io/k8gb
+cd k8gb
+git checkout v0.15.0
+make deploy-full-local-setup
+```
+
+#### 2. **Install Configuration Package**
+```bash
+# Clone this configuration
+git clone https://github.com/upbound/configuration-k8gb-bluegreen.git
+cd configuration-k8gb-bluegreen
+
+# Switch to EU cluster (Blue environment)
+kubectl config use-context k3d-test-gslb1
+up uxp install
+
+# Install the configuration package
+kubectl apply -f examples/configuration.yaml
+kubectl get configurations
+```
+
+#### 3. **Configure Providers**
+```bash
+# Set up Azure credentials
+kubectl create secret generic azure-creds -n crossplane-system \
+  --from-literal=credentials="$(cat ~/.azure/credentials.json)"
+
+# Apply provider configurations and RBAC
+kubectl apply -f examples/providerconfig-helm.yaml
+kubectl apply -f examples/providerconfig-azure.yaml
+kubectl apply -f examples/rbac-k8gb.yaml
+```
+
+#### 4. **Deploy Blue Environment (EU - Active)**
+```bash
+# Deploy blue environment
+kubectl apply -f examples/globalapp/blue-active.yaml
+
+# Monitor deployment
+crossplane beta trace globalapps.example.upbound.io/blue-green
+kubectl get globalapps.example.upbound.io blue-green
+
+# Check blue environment status
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq
+```
+
+#### 5. **Deploy Green Environment (US - Passive)**
+```bash
+# Switch to US cluster
+kubectl config use-context k3d-test-gslb2
+up uxp install
+kubectl apply -f examples/configuration.yaml
+
+# Set up providers (repeat provider setup from step 3)
+# ...
+
+# Deploy green environment
+kubectl apply -f examples/globalapp/green-passive.yaml
+
+# Check green environment status
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq
+```
+
+#### 6. **🔄 Test Blue/Green Failover**
+```bash
+# Simulate blue environment failure
+kubectl config use-context k3d-test-gslb1
+kubectl scale deployment podinfo-blue-green --replicas=0
+
+# Watch GSLB detect failure and policy changes
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq '.status.gslb'
+
+# Switch to green cluster - check if it's now active  
+kubectl config use-context k3d-test-gslb2
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq '.status.gslb'
+```
+
+### 📊 **Blue/Green Status Monitoring**
+
+Monitor the automatic failover process:
+
+```bash
+# View complete GlobalApp status (infrastructure, application, gslb)
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq '.status'
+
+# View just GSLB status (health, policies, active cluster)
+kubectl get globalapps.example.upbound.io blue-green -o yaml | yq '.status.gslb'
+
+# View k8gb GSLB resources directly
+kubectl get gslb -A
+kubectl describe gslb failover-ingress-blue-green
+```
+
 ## Troubleshooting
 
 ### Common Issues
@@ -212,7 +314,7 @@ crossplane beta trace globalapp.example.upbound.io/my-global-app
 
 # Check k8gb status
 kubectl get gslb -A
-kubectl describe gslb failover-ingress -n demo
+kubectl describe gslb failover-ingress-blue-green
 
 # Check provider status
 kubectl get providers
