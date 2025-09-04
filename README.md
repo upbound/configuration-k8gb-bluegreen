@@ -76,7 +76,7 @@ See [k8gb installation guide](https://www.k8gb.io/docs/install.html) for detaile
    metadata:
      name: configuration-k8gb-bluegreen
    spec:
-     package: xpkg.upbound.io/upbound/configuration-k8gb-bluegreen:v0.1.0
+     package: xpkg.upbound.io/upbound/configuration-k8gb-bluegreen:v0.1.1
    EOF
    ```
 

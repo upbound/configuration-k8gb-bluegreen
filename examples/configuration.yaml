@@ -3,4 +3,4 @@ kind: Configuration
 metadata:
   name: configuration-k8gb-bluegreen
 spec:
-  package: xpkg.upbound.io/solutions/configuration-k8gb-bluegreen:v0.0.1
+  package: xpkg.upbound.io/upbound/configuration-k8gb-bluegreen:v0.1.1
